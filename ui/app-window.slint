@@ -1,0 +1,186 @@
+import { Button, VerticalBox, HorizontalBox, LineEdit } from "std-widgets.slint";
+// component now_counter inherits Rectangle {
+//     VerticalBox {
+//         Text {
+//             in-out property<int> counter: 0;
+//             text: counter;
+//         }
+//         Image {
+//             source: @image-url("image/Item_Original_Resin.webp");
+//         }
+//     }
+// }
+
+
+export component AppWindow inherits Window {
+    // callback request-increase-value();
+    // VerticalBox {
+    //     Text {
+    //         text: "Counter: \{root.counter}";
+    //     }
+    //     Button {
+    //         text: "Increase value";
+    //         clicked => {
+    //             root.request-increase-value();
+    //         }
+    //     }
+    //  }
+    //now-counter {}
+    width: 256px;
+    height: 512px;
+
+    
+
+    in-out property<int> counter: 0;
+    in-out property<int> hours: 0;
+    in-out property<int> minutes: 0;
+    in-out property<int> seconds: 0;
+    in-out property<int> modsec: 0;
+
+    in-out property <string> input: "";
+
+    callback edit-resin(int);
+    callback edit-time(int,int,int);
+    
+    
+    timer := Timer {
+        interval: 1s;
+        running: true;
+        triggered() => {
+            edit-time(seconds, modsec, counter);
+        }
+    }
+
+    VerticalBox {
+        padding: 0px;
+        padding-top: 16px;
+        spacing: 0px;
+        HorizontalBox {
+            width: 256px;
+            height: 64px;
+            padding: 0px;
+            padding-left: 80px;
+            padding-right: 32px;
+            spacing: 0px;
+            Text {
+                text: counter;
+                font-size: 42px;
+                y: (parent.height - self.height) / 2;
+            }
+            Image {
+                source: @image-url("image/Item_Original_Resin.webp");
+                width: parent.height;
+                height: parent.height;
+            }
+        }
+        HorizontalBox {
+            width: 256px;
+            height: 32px;
+            padding: 0px;
+            Text {
+                text: hours + "h" + " " + minutes + "min";
+                vertical-alignment: TextVerticalAlignment.center;
+                font-size: 16px;
+                horizontal-alignment: TextHorizontalAlignment.center;
+            }
+        }
+        HorizontalBox {
+            padding: 0px;
+            alignment: LayoutAlignment.space-around;
+            height: 256px;
+            width: 256px;
+            VerticalBox {
+                padding-top: 32px;
+                width: 112px;
+                alignment: LayoutAlignment.space-around;
+                height: parent.height;
+                padding: 0px;
+                Button {
+                    text: -20;
+                    width: 112px;
+                    height: 48px;
+                    clicked => {
+                        root.edit-resin(-20);
+                    }
+                }
+                Button {
+                    text: -40;
+                    width: 112px;
+                    height: 48px;
+                    clicked => {
+                        root.edit-resin(-40);
+                    }
+                }
+                Button {
+                    text: -60;
+                    width: 112px;
+                    height: 48px;
+                    clicked => {
+                        root.edit-resin(-60);
+                    }
+                }
+            }
+            VerticalBox {
+                padding-top: 32px;
+                width: 112px;
+                alignment: LayoutAlignment.space-around;
+                height: parent.height;
+                padding: 0px;
+                Button {
+                    text: "+" + 20;
+                    width: 112px;
+                    height: 48px;
+                    clicked => {
+                        root.edit-resin(20);
+                    }
+                }
+                Button {
+                    text: "+" + 40;
+                    width: 112px;
+                    height: 48px;
+                    clicked => {
+                        root.edit-resin(40);
+                    }
+                }
+                Button {
+                    text: "+" + 60;
+                    width: 112px;
+                    height: 48px;
+                    clicked => {
+                        root.edit-resin(60);
+                    }
+                }
+            }
+        }
+        HorizontalBox {
+            padding: 0px;
+            alignment: LayoutAlignment.space-around;
+            input := LineEdit {
+                input-type: number;
+                width: 224px;
+                height: 48px;
+            }
+        }
+        HorizontalBox {
+            padding: 0px;
+            padding-top: 8px;
+            alignment: LayoutAlignment.space-around;
+            Button {
+                icon: @image-url("image/minus-svgrepo-com.svg");
+                width: 96px;
+                height: 48px;
+                clicked => {
+                    root.edit-resin(("-" + input.text).to-float());
+                }
+            }
+            Button {
+                icon: @image-url("image/plus-svgrepo-com.svg");
+                width: 96px;
+                height: 48px;
+                clicked => {
+                    root.edit-resin(input.text.to-float());
+                }
+            }   
+        }
+    }
+}
